@@ -1,15 +1,27 @@
-from pytube import YouTube
-import request
+from pytube import YouTube 
 
-def Download(link):
-    youtubeObject  = YouTube(link)
-    youtubeObject = youtubeObject.streams.get_highest_resolution()
-    try:
-        youtubeObject.download()
-    except:
-        print('An Error has occured! check your link and try again!')
-    print('Download complete!')
+# where to save 
+SAVE_PATH = "./" #to_do 
 
-link = request.form.get('desired_link')
-Download(link)
+# link of the video to be downloaded 
+link = "https://www.youtube.com/watch?v=fW_OS3LGB9Q&t=2142s"
 
+try: 
+    # object creation using YouTube 
+    yt = YouTube(link) 
+except: 
+    #to handle exception 
+    print("Connection Error") 
+
+# Get all streams and filter for mp4 files
+mp4_streams = yt.streams.filter(file_extension='mp4').all()
+
+# get the video with the highest resolution
+d_video = mp4_streams[-1]
+
+try: 
+    # downloading the video 
+    d_video.download(output_path=SAVE_PATH)
+    print('Video downloaded successfully!')
+except: 
+    print("Error Check the Code!")
